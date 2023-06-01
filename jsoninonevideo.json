@@ -1,0 +1,34 @@
+{
+
+
+    "//first_comment": "parsed['isAdmin']",
+    "//seccond_comment": "parsed['shop'][1]",
+    "//third_comment": "parsed['marks']['shopItem2]",
+
+
+
+    "harrry": "bhai",
+    "score": 2,
+    "isAdmin": false,
+    "liscence": null,
+
+    "shop": [
+
+        "food", "dog", "sunfloweoil", "pen "
+    ],
+
+
+    "marks":{
+
+
+        "name": "chirag kumar",
+        "marks_obtained": 67,
+        "gender": "M",
+        "city": "balgore",
+        "shopItem2":["apple", "baloon", "mango", {"a":true}]
+    }
+
+}
+
+
+
