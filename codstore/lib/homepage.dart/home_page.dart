@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codstore/components/purchasedproduct/previsoulybuy.dart';
+import 'package:codstore/homepage.dart/item_screen.dart';
+import 'package:codstore/homepage.dart/viewscreen.dart';
 import 'package:flutter/material.dart';
-
 import '../components/bottom_navigationbar_homePpage.dart';
 import '../components/home_screen_components.dart';
 import '../components/singletextValue.dart';
 import '../components/userreport.dart';
+import '../model/usermodel.dart';
 
 
 
@@ -47,6 +50,43 @@ class _HomePageState extends State<HomePage> {
   
   }
 
+
+void searchProducts(String controllernmae) {
+  FirebaseFirestore.instance
+      .collectionGroup('products')
+      .where('name', isEqualTo: controllernmae)
+      .get()
+      .then((QuerySnapshot snapshot) {
+    snapshot.docs.forEach((DocumentSnapshot document) {
+      // Handle the retrieved document(s) here
+      print(document.data());
+    });
+  });
+}
+
+
+  
+
+
+  // Future CreateUser({required String name,}) async {
+  // //  Refference to our documents
+  // final docuser= FirebaseFirestore.instance.collection('users').doc();
+  // final user = User(
+  //   id: docuser.id,
+  //   name: name,
+  //   age: 21,
+  //  birthday: DateTime(2001, 7, 28)
+  // );
+
+  // // final json = {
+  // //   'nmae': name,
+  // //   "age": 21,
+  // //   'birthday': DateTime(2001, 7, 28)
+  // // };
+  // final json = user.tojson();
+  // await docuser.set(json);
+  // }
+
   @override
   Widget build(BuildContext context) {
      var width = MediaQuery.of(context).size.width;
@@ -56,119 +96,294 @@ class _HomePageState extends State<HomePage> {
 
       child: Scaffold(
         appBar: AppBar(
+
+          // actions: [
+          //   IconButton(onPressed: (){
+          //     Navigator.push(context, MaterialPageRoute(builder: (context){
+          //       // return ShowData();
+          //       return ViewScreen();
+          //     }));
+          //   }, icon: Icon(Icons.share_rounded)),
+
+            // IconButton(onPressed: (){
+            //   final name = controllernmae.text;
+
+            //   CreateUser(name:name);
+            // }, icon: Icon(Icons.add))
+          // ],
           backgroundColor: Colors.yellow.shade900,
-          title: Column(
-            children: [
+          title:  Column(
+              children: [
+                Row(
+                     children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top:30.0),
+                          child: CircularAvtarUser(AssetImage("assets/user.jpg")),
+                        ),
+                       Padding(
+                         padding: const EdgeInsets.symmetric(vertical:14.0, horizontal: 10),
+                         child: UserDetails(),
+                       ),
+                     ],
+                   ),
 
-              Row(
-                   children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top:43.0),
-                        child: CircularAvtarUser(AssetImage("assets/user.jpg")),
-                      ),
-                     Padding(
-                       padding: const EdgeInsets.symmetric(vertical:4.0, horizontal: 10),
-                       child: UserDetails(),
-                     ),
-                   ],
-                 ),
+
+                   Padding(
+                     padding: const EdgeInsets.symmetric(horizontal: 10),
+                     child: 
+                         SearchProductTextField(height*0.05, width*0.7, controllernmae),
+                         
+
+                   ),
 
 
-                 Padding(
-                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical:10),
-                   child: SearchProductTextField(height*0.07, width)
-                 )
-            ],
+                   SizedBox(height: 20,)
+
+
+
+
+              ]
+            
           ),
           
         ),
 
-         body:  Container(
-              height: height,
-              width: width,
-              color: Colors.white,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: [
-
-                    Text("My Wallet Balance"),
-                    Text("Rs.2,500"),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: UserWallet(height*0.1)
-                        ),
-
-                        Expanded(
-                          child:UserWalletStatement(height*0.1)
-                        )
-                      ],
-                    ),
-
-
-
-                    Container(
-                      width: double.infinity,
-                      color: Colors.grey.shade100.withOpacity(0.9),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("My Previous Order", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold,color: Colors.yellow.shade900),),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: PrevisoulyProduct(AssetImage("assets/headphone.jpg")),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: PrevisoulyProduct(AssetImage("assets/headphone.jpg")),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: PrevisoulyProduct(AssetImage("assets/shoe.jpg")),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: PrevisoulyProduct(AssetImage("assets/watch.jpg")),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: PrevisoulyProduct(AssetImage("assets/watterbottle.jpg")),
-                                ),
-                           
-                             
-                                                      
-                                                      
-                                ],
+         body: Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.white,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+         
+                    children: [
+         
+                       Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                child: Text("My Wallet Balance", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold,color: Colors.yellow.shade900),),
                               ),
+                      
+
+
+
+                       Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical:5),
+                                child: Text("Rs. 2,500", style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold,color: Colors.black),),
+                              ),
+                    
+         
+                       Row(
+                          children: [
+                            Expanded(
+                              child: UserWallet(height*0.1)
                             ),
-                          )
-                        ],
+                               
+                            Expanded(
+                              child:UserWalletStatement(height*0.1)
+                            )
+                          ],
+                        ),
+                      
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical:1),
+                        child: Text("My Previous Oreder", style: TextStyle(color: Colors.yellow.shade900, fontSize: 20.0, fontWeight: FontWeight.bold),),
                       ),
-                    )
+                      Container(
+                          height:height*0.2,
+                          width: double.infinity,
+                           child:   StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance.collection('products').snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    }
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator(); // Show a loading indicator while waiting for data
+                                    }
+                        
+                                    if (snapshot.hasData && snapshot.data != null) {
+                                        return  ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemExtent:  100,
+                                            itemCount: snapshot.data!.docs.length,
+                                            itemBuilder: (context, index) {
+                                              var userData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+
+                                              return Center(
+                                                child: Container(
+                                                      height: height*0.14,
+                                                      width: width*0.2,
+                                                      margin: EdgeInsets.all(10),
+                                                      child: Column(
+                                                        // title: Text(' ${userData['productname']}'),
+                                                        // leading:  Text(' ${userData['productid']}'),
+                                                        // subtitle: Text('${userData['productprice']}'),
+                                                        // trailing: Image.network('${userData['productimg']}',fit: BoxFit.cover,),
+                                              
+                                              
+                                                        children: [
+                                                          Expanded(
+                                                            child: InkWell(
+                                                              onTap:(){Navigator.push(context, 
+                                                              MaterialPageRoute(builder: (context){
+                                                                return ItemScreenWhichChoosed(
+                                                                  productreview:'${userData['preview']}',
+                                                                  productdesciption:'${userData['description']}',
+                                                                  itemimg1: '${userData['productimg3']}',
+                                                                  itemimg2: '${userData['productimg2']}',
+                                                                  itemimg3: '${userData['productimg']}',
+                                                                  itemName:'${userData['productname']}');
+                                                                }));
+                                                              
+                                                              },
+                                                              
+                                                              child: CircleAvatar(
+                                                                backgroundColor: Colors.transparent,
+                                                                foregroundColor: Colors.grey.shade300,
+                                                                radius: 110,
+                                                                child: Container(
+                                                                  height: height*2,
+                                                                  width: width*1,
+                                                                  margin: EdgeInsets.symmetric(vertical: 10.0),
+                                                                  decoration: BoxDecoration(
+                                                                    border: Border.all(width: 2, color: Colors.grey.shade200),
+                                                                  borderRadius: BorderRadius.circular(100),
+                                                                  image: DecorationImage(
+                                                                    image: NetworkImage('${userData['productimg3']}'),
+                                                                    fit: BoxFit.cover,
+                                                                  ),
+                                                                ),
+                                                                  // child: Image.network('${userData['productimg']}'),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text('${userData['productname']}'),
+                                                        ],
+                                                      ),
+                                                    
+                                                  
+                                                ),
+                                              );
+                                            },
+                                          
+                                        );
+                                        }
+                        
+                                        return Text('No data available');
+                                      },
+                                    ),
+                            
+                          
+                        
+                      ),
+                      // -----------offrrs and deal
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical:1),
+                        child: Text("My Offers & Deals", style: TextStyle(color: Colors.yellow.shade900, fontSize: 20.0, fontWeight: FontWeight.bold),),
+                      ),
+                      Container(
+                          height:height*0.2,
+                          width: double.infinity,
+                           child:   StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance.collection('offersanddeals').snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    }
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator(); // Show a loading indicator while waiting for data
+                                    }
+                        
+                                    if (snapshot.hasData && snapshot.data != null) {
+                                        return  ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemExtent:  100,
+                                            itemCount: snapshot.data!.docs.length,
+                                            itemBuilder: (context, index) {
+                                              var userData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+
+                                              return Center(
+                                                child: Container(
+                                                      height: height*0.14,
+                                                      width: width*0.2,
+                                                      margin: EdgeInsets.all(10),
+                                                      child: Column(
+                                                        // title: Text(' ${userData['productname']}'),
+                                                        // leading:  Text(' ${userData['productid']}'),
+                                                        // subtitle: Text('${userData['productprice']}'),
+                                                        // trailing: Image.network('${userData['productimg']}',fit: BoxFit.cover,),
+                                              
+                                              
+                                                        children: [
+                                                          Expanded(
+                                                            child: CircleAvatar(
+                                                              backgroundColor: Colors.transparent,
+                                                              foregroundColor: Colors.grey.shade300,
+                                                              radius: 110,
+                                                              child: Container(
+                                                                height: height*2,
+                                                                width: width*1,
+                                                                margin: EdgeInsets.symmetric(vertical: 10.0),
+                                                                decoration: BoxDecoration(
+                                                                  border: Border.all(width: 2, color: Colors.grey.shade200),
+                                                                borderRadius: BorderRadius.circular(100),
+                                                                image: DecorationImage(
+                                                                  image: NetworkImage('${userData['dealimg']}'),
+                                                                  fit: BoxFit.cover,
+                                                                ),
+                                                              ),
+                                                                // child: Image.network('${userData['productimg']}'),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          
+                                                          Text(' ${userData['dealname']}'),
+                                                        ],
+                                                      ),
+                                                    
+                                                  
+                                                ),
+                                              );
+                                            },
+                                          
+                                        );
+                                        }
+                        
+                                        return Text('No data available');
+                                      },
+                                    ),
+                            
+                          
+                        
+                      )
+                            
+
+                            
+                        
+
+
+
+
+                     
 
 
 
 
 
+                    ]
 
-
-
-                  ],
-              
-                  
+                  )
                 ),
-              )
-          ),
 
+
+         ),
+         
+         
+         
+                
+            
+                    
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
           child: ClipRRect(
@@ -221,12 +436,10 @@ class _HomePageState extends State<HomePage> {
             )
           ),
         )
-
-
-
-    
         
-      
     );
+
+
+            
   }
 }
