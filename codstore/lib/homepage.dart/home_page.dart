@@ -7,7 +7,6 @@ import '../components/bottom_navigationbar_homePpage.dart';
 import '../components/home_screen_components.dart';
 import '../components/singletextValue.dart';
 import '../components/userreport.dart';
-import '../model/usermodel.dart';
 
 
 
@@ -51,18 +50,7 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-void searchProducts(String controllernmae) {
-  FirebaseFirestore.instance
-      .collectionGroup('products')
-      .where('name', isEqualTo: controllernmae)
-      .get()
-      .then((QuerySnapshot snapshot) {
-    snapshot.docs.forEach((DocumentSnapshot document) {
-      // Handle the retrieved document(s) here
-      print(document.data());
-    });
-  });
-}
+
 
 
   
